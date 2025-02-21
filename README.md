@@ -14,7 +14,8 @@ There were a number of edits made to the file before uploading:
 
 ## 2) Fix Experience Dimension - SQL
 
-There appeared to be a tagging error in the experience column. Some users were tagged as "New" having had previous transactions tagged as "Existing"
+There appeared to be a tagging error in the experience column. Some users were tagged as "New" despite having previous transactions tagged as "Existing"
+
 My assumptions were as follows:
 - A user tagged "New" at any point was indeed a New user.
 - A user could only move from "New" to "Existing" once they had triggered the "Transfer Transferred" event
