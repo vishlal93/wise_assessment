@@ -1,10 +1,10 @@
+--Main source table
 WITH MAIN AS (SELECT *
 FROM 
 WISE_TASK_BUILD)
-
-
-
 ,
+
+-- Separate sub queries for each stage of the funnel
 TC AS (
 SELECT 
 event_name,
@@ -31,10 +31,7 @@ FROM MAIN
 where event_name = 'Transfer Funded'
 )
 
-
-
-
-, TT AS (
+ , TT AS (
 SELECT 
 event_name,
 user_id,
@@ -47,7 +44,8 @@ FROM MAIN
 where event_name = 'Transfer Transferred'
 )
 
-
+--Build structure of the table to get a row for each user,date, region,experience, platform
+ 
 ,PLAYER_FUNNEL_BUILD AS (
 
 SELECT distinct
@@ -65,7 +63,7 @@ AND TC.REGION=FB.REGION
 AND TC.EXPERIENCE=FB.EXPERIENCE
 AND TC.PLATFORM=FB.PLATFORM)
  
-
+-- Final output that shows the funnel of each transaction at a user and date level
 , FINAL_BUILD AS (
 SELECT 
 PFB.dt
