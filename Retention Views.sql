@@ -1,3 +1,4 @@
+--Add order of transactions to main table
 WITH MAIN AS (SELECT *, DENSE_RANK() OVER(PARTITION BY USER_ID ORDER BY UPDATED_DT) AS TRANSACTION_ORDER
 FROM 
 WISE_TASK_BUILD)
@@ -14,13 +15,13 @@ experience,
 CASE WHEN EXPERIENCE = 'New' then 0
  WHEN EXPERIENCE = 'Existing' THEN 1
 ELSE 1 END as existing_flag,
-DENSE_RANK() OVER(PARTITION BY USER_ID ORDER BY UPDATED_DT) AS SUCCESSFUL_TRANSACTION_ORDER
+DENSE_RANK() OVER(PARTITION BY USER_ID ORDER BY UPDATED_DT) AS SUCCESSFUL_TRANSACTION_ORDER --Define if this is the users first successful transaction on this journey
 FROM MAIN 
 where event_name = 'Transfer Transferred'
 )
 
 ,
-
+--All created transactions
 TC AS (
 SELECT 
 event_name,
@@ -34,7 +35,7 @@ TRANSACTION_ORDER
 FROM MAIN 
 where event_name = 'Transfer Created'
 )
-
+--Final output that shows transfer attempts and successful transfers after a user has completed a successful transfer
 , FINAL_BUILD AS (
 SELECT
 TT.USER_ID
